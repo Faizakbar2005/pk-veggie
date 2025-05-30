@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+feedparser
+scikit-learn
+nltk
+beautifulsoup4

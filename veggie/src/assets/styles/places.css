@@ -1,0 +1,173 @@
+/* places.css */
+.places-container {
+  @apply container mx-auto px-4 mt-24 mb-6;
+}
+
+.places-card {
+  @apply bg-white rounded-lg shadow-lg p-8;
+}
+
+.places-header {
+  @apply border-b border-gray-200 pb-6 mb-8;
+}
+
+.places-title {
+  @apply font-bold text-3xl text-blueGray-700 tracking-wide;
+}
+
+.search-container {
+  @apply flex items-center gap-4 max-w-xl mx-auto;
+}
+
+.search-input-wrapper {
+  @apply relative flex-grow;
+}
+
+.search-input {
+  @apply w-full border border-gray-300 rounded-full pl-12 pr-6 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition;
+}
+
+.search-icon {
+  @apply absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none;
+}
+
+.search-button {
+  @apply bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 py-3 font-semibold transition-shadow shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.error-message {
+  @apply bg-red-100 border-l-4 border-red-500 text-red-700 p-4 my-6 rounded max-w-xl mx-auto;
+}
+
+.results-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 max-w-4xl mx-auto;
+}
+
+.place-card {
+  @apply bg-gray-50 rounded-lg shadow hover:shadow-md transition p-5 border cursor-pointer flex flex-col;
+}
+
+.place-name {
+  @apply text-xl font-semibold mb-2 text-blueGray-800;
+}
+
+.place-address {
+  @apply text-gray-600 mb-2;
+}
+
+.place-rating {
+  @apply flex justify-between text-sm text-gray-700 font-medium;
+}
+
+.detail-container {
+  @apply mt-12 max-w-4xl mx-auto bg-gray-50 rounded-lg p-8 shadow-lg border;
+}
+
+.detail-header {
+  @apply flex justify-between items-center mb-6;
+}
+
+.back-button {
+  @apply text-blue-600 hover:underline font-semibold;
+}
+
+.detail-title {
+  @apply text-2xl font-bold text-blueGray-900;
+}
+
+.detail-content {
+  @apply grid md:grid-cols-3 gap-8;
+}
+
+.detail-info {
+  @apply md:col-span-2 space-y-3 text-gray-800;
+}
+
+.action-buttons {
+  @apply flex flex-wrap gap-4 mt-6;
+}
+
+.action-button {
+  @apply px-5 py-2 rounded text-sm font-medium;
+}
+
+.copy-button {
+  @apply bg-gray-300 hover:bg-gray-400;
+}
+
+.map-button {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+
+.select-button {
+  @apply text-white;
+}
+
+.photo-container {
+  @apply rounded overflow-hidden shadow max-h-72;
+}
+
+.photo-placeholder {
+  @apply flex items-center justify-center text-gray-400 italic;
+}
+
+.photo-thumbnail {
+  height: 200px;
+  overflow: hidden;
+}
+
+.photo-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.place-card:hover .photo-thumbnail img {
+  transform: scale(1.03);
+}
+
+.photo-container {
+  height: 400px;
+}
+
+.photo-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.photo-placeholder {
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  border-radius: 0.5rem;
+  color: #666;
+  font-style: italic;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  align-items: center;
+}
+.page-info {
+  font-weight: bold;
+}
+.pagination button {
+  padding: 0.5rem 1rem;
+  background-color: #3182ce;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+.pagination button:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
