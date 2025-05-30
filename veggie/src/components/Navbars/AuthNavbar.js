@@ -42,12 +42,12 @@ export default function Navbar(props) {
 {/* Judul Dashboard */}
 <ul className="flex flex-col lg:flex-row list-none mr-auto">
   <li className="flex items-center">
-    <div className="text-black text-base font-extrabold leading-tight inline-block mr-4 py-2 whitespace-nowrap uppercase tracking-wide">
-      -{" "}
-      <em className="italic not-italic font-semibold">
-        Dashboard Interaktif Permintaan Sayuran Jabodetabek
-      </em>
-    </div>
+ <div className="text-black text-sm sm:text-base md:text-lg lg:text-xl font-extrabold leading-tight inline-block mr-4 py-2 whitespace-normal uppercase tracking-wide">
+  -{" "}
+  <em className="italic not-italic font-semibold">
+    Dashboard Interaktif Permintaan Sayuran Jabodetabek
+  </em>
+</div>
   </li>
 </ul>
 

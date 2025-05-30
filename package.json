@@ -1,10 +1,18 @@
 {
 
-  "scripts": {
-
-    "test": "jest"
-
+"scripts": {
+  "test": "jest",
+  "cypress:open": "cypress open",
+  "cypress:run": "cypress run"
+},
+"jest": {
+  "testEnvironment": "jsdom",
+  "setupFilesAfterEnv": ["<rootDir>/src/setupTests.js"],
+  "transform": {
+    "^.+\\.jsx?$": "babel-jest"
   },
+  "moduleFileExtensions": ["js", "jsx"]
+},
 
   "devDependencies": {
 

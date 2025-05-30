@@ -11,7 +11,7 @@ export default function CardDemandChart() {
   }, []);
 
   return (
-  <div className="relative flex flex-col min-w-0 break-words bg-white rounded shadow-lg p-4">
+  <div className="relative flex flex-col min-w-0 break-words bg-white rounded shadow-lg p-4 mt-32 md:mt-40">
   <h2 className="text-xl font-semibold mb-2">Permintaan Sayur Tertinggi di Wilayah JABODETABEK</h2>
   
   {/* Garis pemisah */}

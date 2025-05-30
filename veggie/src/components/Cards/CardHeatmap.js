@@ -2,7 +2,7 @@ import React from "react";
 
 export default function CardHeatmap() {
   return (
-    <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-xl">
+    <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-xl mt-32 md:mt-40">
       {/* Header */}
       <div className="rounded-t-xl px-4 py-3 bg-green-100 border-b border-gray-200">
         <h6 className="text-xl font-semibold ">

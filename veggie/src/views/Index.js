@@ -67,9 +67,9 @@ export default function Index() {
           <div className="text-center mb-10">
             <h2 className="text-4xl font-semibold text-blueGray-700">About Us</h2>
             <p className="mt-4 text-lg text-blueGray-500">
-              Veggie adalah sistem dashboard yang dirancang untuk membantu tim sales menganalisis,
-              memprediksi, dan memantau permintaan sayuran secara real-time di wilayah Jabodetabek.
-              Platform ini memperkuat pengambilan keputusan berbasis data untuk distribusi dan penjualan sayuran.
+              Veggie adalah sistem dashboard yang dirancang untuk membantu tim sales menganalisis
+              data HORECA terkhususnya di wilayah JABODETABEK untuk mengakuisisi data customer potensial.
+              Platform ini membantu dalam pengambilan keputusan berbasis data untuk distribusi dan penjualan sayuran.
             </p>
           </div>
         </div>
@@ -81,7 +81,7 @@ export default function Index() {
           <div className="text-center mb-10">
             <h2 className="text-4xl font-semibold text-blueGray-700">Our Team</h2>
             <p className="mt-4 text-lg text-blueGray-500 mb-12">
-              Tim kami terdiri dari profesional muda di bidang teknologi, analisis data, dan pertanian.
+              Mahasiswa Politeknik Negeri Jakarta yang sedang menempuh D4 Program Studi Teknik Informatika.
               Kami berdedikasi dalam menciptakan solusi digital yang membantu meningkatkan efisiensi penjualan hasil pertanian.
             </p>
           </div>

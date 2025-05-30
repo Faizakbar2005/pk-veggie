@@ -220,7 +220,7 @@ export default function Maps() {
   }, [selectedWilayah, selectedLimit]);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="min-h-screen bg-gray-50 p-4 pt-32 md:pt-40">
       {/* Header */}
       <div className="relative z-10 mb-6">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
