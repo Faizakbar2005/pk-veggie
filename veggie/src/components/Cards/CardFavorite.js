@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Papa from "papaparse";
 
 export default function FavoriteHoReca({ favorites, onRemoveFavorite }) {
-  const apiKey = "AIzaSyAg_WIL_YuycSAUtMWWBWy1JSxWhpJoUyg";
+  const apiKey = "AIzaSyD7LDPmOrB9LL6pKYz9SQi28a71ORNqdpU";
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
 

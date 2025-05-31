@@ -410,7 +410,7 @@ return (
               {selectedPlace.photos?.length > 0 && selectedPlace.photos[0].name ? (
                 <div className="photo-container">
                   <img
-                    src={`https://places.googleapis.com/v1/${selectedPlace.photos[0].name}/media?maxWidthPx=600&key=AIzaSyAg_WIL_YuycSAUtMWWBWy1JSxWhpJoUyg`}
+                    src={`https://places.googleapis.com/v1/${selectedPlace.photos[0].name}/media?maxWidthPx=600&key=AIzaSyD7LDPmOrB9LL6pKYz9SQi28a71ORNqdpU`}
                     alt="Foto tempat"
                     className="w-full h-full object-cover rounded"
                   />

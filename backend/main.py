@@ -244,7 +244,7 @@ model = joblib.load('backend/sentiment_model_lgbm.pkl')
 vectorizer = joblib.load('backend/tfidf_vectorizer_.pkl')
 
 # === Google Places API ===
-X_GOOG_API_KEY = "AIzaSyAg_WIL_YuycSAUtMWWBWy1JSxWhpJoUyg"
+X_GOOG_API_KEY = "AIzaSyD7LDPmOrB9LL6pKYz9SQi28a71ORNqdpU"
 BASE_URL = "https://places.googleapis.com/v1/places:searchText"
 NEARBY_URL = "https://places.googleapis.com/v1/places:searchNearby"
 
