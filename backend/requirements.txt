@@ -4,3 +4,6 @@ feedparser
 scikit-learn
 nltk
 beautifulsoup4
+httpx
+requests
+python-dotenv
