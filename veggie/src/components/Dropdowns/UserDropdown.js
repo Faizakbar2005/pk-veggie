@@ -53,23 +53,10 @@ const UserDropdown = () => {
           e.preventDefault();
           dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
         }}
-        className="text-blueGray-500 hover:text-blueGray-700 focus:outline-none"
+        className="text-blueGray-500 hover:text-blueGray-700 focus:outline-none px-3 py-1 text-xl "
       >
-        {/* Ikon 3 garis tebal */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-8 h-8"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
+        <i className="fas fa-bars"></i>
+      
       </button>
 
       <div

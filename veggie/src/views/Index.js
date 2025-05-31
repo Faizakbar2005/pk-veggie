@@ -34,35 +34,35 @@ export default function Index() {
   />
 
   {/* Konten hero */}
-  <div className="container mx-auto relative z-10 px-4 py-16">
-    <div className="flex flex-wrap items-center">
-      {/* Content column - Diberi batas kanan agar tidak tabrakan dengan sayy.svg */}
-      <div className="w-full md:w-8/12 lg:w-7/12 xl:w-6/12 text-center md:text-left md:pr-8 lg:pr-16">
-        {/* VeggieCast Logo - Responsive sizing */}
-        <img
-          src={veggieLogo}
-          alt="VeggieCast Logo"
-          className="w-40 sm:w-48 md:w-56 lg:w-64 xl:w-72 max-w-full h-auto mb-2 mx-auto md:mx-0"
-        />
-        
-        <p className="mt-4 text-base sm:text-lg leading-relaxed font-semibold text-black">
-          By Epic Sciency Team
-        </p>
-
-        <div className="mt-8 sm:mt-12">
-          <Link
-            to="/auth/login"
-            className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150 inline-block min-w-32"
-          >
-            Continue
-          </Link>
-        </div>
-      </div>
+<div className="container mx-auto relative z-10 px-4 py-16">
+  <div className="flex flex-wrap items-center">
+    {/* Content column - Diberi batas kanan agar tidak tabrakan dengan sayy.svg */}
+    <div className="w-full md:w-8/12 lg:w-7/12 xl:w-6/12 text-center md:text-left md:pr-8 lg:pr-16">
+      {/* VeggieCast Logo - Responsive sizing */}
+      <img
+        src={veggieLogo}
+        alt="VeggieCast Logo"
+        className="w-40 sm:w-48 md:w-56 lg:w-64 xl:w-72 max-w-full h-auto mb-2 mx-auto md:mx-0"
+      />
       
-      {/* Spacer column untuk desktop agar konten tidak tabrakan dengan sayy.svg */}
-      <div className="hidden md:block md:w-4/12 lg:w-5/12 xl:w-6/12"></div>
+      <p className="mt-4 text-base sm:text-lg leading-relaxed font-semibold text-black text-center md:text-left">
+        By Epic Sciency Team
+      </p>
+
+      <div className="mt-8 sm:mt-12 text-center md:text-left">
+        <Link
+          to="/auth/login"
+          className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150 inline-block min-w-32"
+        >
+          Continue
+        </Link>
+      </div>
     </div>
+    
+    {/* Spacer column untuk desktop agar konten tidak tabrakan dengan sayy.svg */}
+    <div className="hidden md:block md:w-4/12 lg:w-5/12 xl:w-6/12"></div>
   </div>
+</div>
 </section>
 
 
