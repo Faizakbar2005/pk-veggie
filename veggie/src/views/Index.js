@@ -26,36 +26,41 @@ export default function Index() {
   {/* Overlay gelap */}
   <div className="absolute inset-0 bg-black opacity-50"></div>
 
-  {/* Gambar say.png di pojok kanan */}
-<img
-  src={require("../assets/img/sayy.svg").default}
-  alt="Say Icon"
-  className="absolute right-0 top-1/2 transform -translate-y-1/2 w-48 h-48 object-contain z-20"
-/>
+  {/* Gambar say.png di pojok kanan - Hidden pada mobile untuk menghindari tabrakan */}
+  <img
+    src={require("../assets/img/sayy.svg").default}
+    alt="Say Icon"
+    className="absolute right-0 top-1/2 transform -translate-y-1/2 w-32 h-32 lg:w-48 lg:h-48 object-contain z-20 hidden md:block"
+  />
 
   {/* Konten hero */}
-  <div className="container mx-auto relative z-10 flex flex-wrap items-center">
-    <div className="container mx-auto relative z-10 flex flex-wrap items-center px-4 py-16">
-      <div className="w-full md:w-8/12 lg:w-6/12 text-center md:text-left">
+  <div className="container mx-auto relative z-10 px-4 py-16">
+    <div className="flex flex-wrap items-center">
+      {/* Content column - Diberi batas kanan agar tidak tabrakan dengan sayy.svg */}
+      <div className="w-full md:w-8/12 lg:w-7/12 xl:w-6/12 text-center md:text-left md:pr-8 lg:pr-16">
+        {/* VeggieCast Logo - Responsive sizing */}
         <img
           src={veggieLogo}
           alt="VeggieCast Logo"
-          className="w-48 max-w-full h-auto mb-2"
-          style={{ maxWidth: "70%" }}
+          className="w-40 sm:w-48 md:w-56 lg:w-64 xl:w-72 max-w-full h-auto mb-2 mx-auto md:mx-0"
         />
-        <p className="mt-4 text-lg leading-relaxed font-semibold text-black">
+        
+        <p className="mt-4 text-base sm:text-lg leading-relaxed font-semibold text-black">
           By Epic Sciency Team
         </p>
 
-        <div className="mt-12">
+        <div className="mt-8 sm:mt-12">
           <Link
             to="/auth/login"
-            className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
+            className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150 inline-block min-w-32"
           >
             Continue
           </Link>
         </div>
       </div>
+      
+      {/* Spacer column untuk desktop agar konten tidak tabrakan dengan sayy.svg */}
+      <div className="hidden md:block md:w-4/12 lg:w-5/12 xl:w-6/12"></div>
     </div>
   </div>
 </section>

@@ -23,27 +23,29 @@ export default function Footer() {
             ></polygon>
           </svg>
         </div>
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap text-center lg:text-left">
-            <div className="w-full lg:w-6/12 px-4">
-              <h4 className="text-3xl font-semibold">Let's keep in touch!</h4>
-              <h5 className="text-lg mt-0 mb-2 text-blueGray-600">
-                Projek ini tersedia di Github.
-              </h5>
-            <div className="mt-6 lg:mb-0 mb-6">
-  <a
-    href="https://github.com/Faizakbar2005/pk-veggie"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <button
-      className="bg-white text-blueGray-800 shadow-lg font-normal h-12 w-12 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2 flex"
-      type="button"
-    >
-      <i className="fab fa-github text-2xl"></i>
-    </button>
-  </a>
-</div>
+  <div className="container mx-auto px-4">
+  <div className="flex flex-wrap text-center lg:text-left">
+    <div className="w-full lg:w-6/12 px-4">
+      <h4 className="text-3xl font-semibold">Let's keep in touch!</h4>
+      <h5 className="text-lg mt-0 mb-2 text-blueGray-600">
+        Projek ini tersedia di Github.
+      </h5>
+      <div className="mt-6 lg:mb-0 mb-6">
+        <a
+          href="https://github.com/Faizakbar2005/pk-veggie"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <button
+            className="bg-white text-blueGray-800 shadow-lg font-normal h-12 w-12 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2 inline-flex hover:shadow-xl transition-shadow duration-200"
+            type="button"
+          >
+            <i className="fab fa-github text-2xl"></i>
+          </button>
+        </a>
+      </div>
+
+
 
             </div>
             <div className="w-full lg:w-6/12 px-4">

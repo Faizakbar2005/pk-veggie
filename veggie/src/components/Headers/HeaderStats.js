@@ -31,7 +31,7 @@ export default function HeaderStats() {
                   <CardStats
                     statSubtitle="TOTAL HORECA"
                     statTitle={stats.total_horeca.toLocaleString()}
-                    statDescripiron="Jumlah total tempat HoReCa di Jabodetabek"
+                    statDescripiron="Jumlah total tempat HORECA di Jabodetabek"
                     statIconName="fas fa-layer-group"
                     statIconColor="bg-red-500"
                   />
@@ -40,7 +40,7 @@ export default function HeaderStats() {
                   <CardStats
                     statSubtitle="RATA-RATA RATING"
                     statTitle={stats.rata_rata_rating.toFixed(2)}
-                    statDescripiron="Nilai rata-rata rating semua tempat"
+                    statDescripiron="Nilai rata-rata rating semua HORECA"
                     statIconName="fas fa-chart-pie"
                     statIconColor="bg-orange-500"
                   />
@@ -67,7 +67,7 @@ export default function HeaderStats() {
                         <span className="text-black font-bold">K: {stats.total_per_kategori.cafe}</span>
                       </div>
                     }
-                    statDescripiron="Jumlah tempat berdasarkan kategori Horeca"
+                    statDescripiron="Jumlah tempat berdasarkan kategori HORECA"
                     statIconName="fas fa-list"
                     statIconColor="bg-lightBlue-500"
                   />

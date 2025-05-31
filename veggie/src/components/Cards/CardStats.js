@@ -4,9 +4,6 @@ import PropTypes from "prop-types";
 export default function CardStats({
   statSubtitle,
   statTitle,
-  statArrow,
-  statPercent,
-  statPercentColor,
   statDescripiron,
   statIconName,
   statIconColor,

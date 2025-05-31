@@ -154,122 +154,130 @@ return (
         <h3 className="places-title">Pencarian Lokasi HORECA</h3>
       </div>
 
- {/* Location Status */}
-{userLocation && (
-  <div className="mb-3">
-    <p className="text-green-600 text-sm font-medium">
-      📍 Lokasi terdeteksi: {userLocation.lat.toFixed(6)}, {userLocation.lng.toFixed(6)}
-    </p>
-  </div>
-)}
-
-{/* Search input + buttons container */}
-<div className="flex items-center space-x-3">
-  {/* Search Input */}
-<div className="flex-grow relative">
-  <input
-    type="text"
-    className="w-full rounded-md border border-gray-300 px-4 py-2 pr-10 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    placeholder="Ketikkan HORECA yang ingin anda cari ..."
-    value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)}
-    onKeyDown={(e) => e.key === "Enter" && searchPlaces()}
-  />
-</div>
-
-
-  {/* Tombol Cari */}
-  <button
-    onClick={searchPlaces}
-    disabled={isLoading}
-    className="flex items-center justify-center rounded-md bg-custom-blue px-4 py-1 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
-  >
-    {isLoading ? (
-      <svg
-        className="animate-spin h-5 w-5"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <circle
-          className="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          strokeWidth="4"
-        />
-        <path
-          className="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-        />
-      </svg>
-    ) : (
-      <FontAwesomeIcon icon={faMagnifyingGlass} className="h-8 w-6" />
-    )}
-  </button>
-
-  {/* Tombol kanan */}
-  <div className="flex space-x-2 ml-auto">
-    {/* Cari HORECA Terdekat */}
-    <button
-      onClick={getCurrentLocation}
-      disabled={isGettingLocation || isLoading}
-      className="flex items-center rounded-md bg-yellow-500  px-4 py-1 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
-    >
-      {isGettingLocation ? (
-        <>
-          <svg
-            className="animate-spin h-4 w-4 mr-2"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            />
-          </svg>
-          Mengambil Lokasi...
-        </>
-      ) : (
-         <FontAwesomeIcon icon={faLocationDot} className="h-8 w-6" />
+      {/* Location Status */}
+      {userLocation && (
+        <div className="mb-3">
+          <p className="text-green-600 text-sm font-medium">
+            📍 Lokasi terdeteksi: {userLocation.lat.toFixed(6)}, {userLocation.lng.toFixed(6)}
+          </p>
+        </div>
       )}
-    </button>
 
-    {/* Reset Lokasi */}
-    {userLocation && (
-      <button
-        onClick={() => setUserLocation(null)}
-        disabled={isLoading}
-        className="rounded-md border border-gray-300 px-3 py-2 text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
-      >
-        🔁 Reset Lokasi
-      </button>
-    )}
+      {/* Search Section - Responsive Layout */}
+      <div className="space-y-3">
+        {/* Row 1: Search Input + Search Button + Location Button */}
+        <div className="flex items-stretch space-x-2">
+          {/* Search Input */}
+          <div className="flex-grow relative">
+            <input
+              type="text"
+              className="w-full h-full rounded-md border border-gray-300 px-4 py-2 pr-10 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Ketikkan HORECA yang ingin anda cari ..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && searchPlaces()}
+            />
+          </div>
 
-    {/* Refresh Terdekat */}
-    {userLocation && (
-      <button
-        onClick={() => searchNearbyPlaces()}
-        disabled={isLoading}
-        className="rounded-md border border-blue-600 px-3 py-2 text-blue-600 font-semibold hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
-      >
-        🔄 Refresh Terdekat
-      </button>
-    )}
-  </div>
-</div>
+          {/* Tombol Cari */}
+          <button
+            onClick={searchPlaces}
+            disabled={isLoading}
+            className="flex items-center justify-center rounded-md bg-custom-blue px-4 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition min-w-[3rem]"
+          >
+            {isLoading ? (
+              <svg
+                className="animate-spin h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+            ) : (
+              <FontAwesomeIcon icon={faMagnifyingGlass} className="h-5 w-5" />
+            )}
+          </button>
+
+          {/* Cari HORECA Terdekat - Di samping tombol cari */}
+          <button
+            onClick={getCurrentLocation}
+            disabled={isGettingLocation || isLoading}
+            className="flex items-center justify-center rounded-md bg-yellow-500 px-4 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition whitespace-nowrap"
+          >
+            {isGettingLocation ? (
+              <>
+                <svg
+                  className="animate-spin h-4 w-4 mr-1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+                <span className="hidden md:inline">Mengambil...</span>
+                <span className="md:hidden">📍</span>
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faLocationDot} className="h-5 w-5" />
+                <span className="hidden md:inline">Terdekat</span>
+                <span className="md:hidden sr-only">Cari Terdekat</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Row 2: Reset & Refresh Buttons - Only show when userLocation exists */}
+        {userLocation && (
+          <div className="flex flex-wrap gap-2">
+            {/* Reset Lokasi */}
+            <button
+              onClick={() => setUserLocation(null)}
+              disabled={isLoading}
+              className="flex items-center justify-center rounded-md border border-gray-300 px-3 py-2 text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition text-sm"
+            >
+              <span className="mr-1">🔁</span>
+              <span>Reset Lokasi</span>
+            </button>
+
+            {/* Refresh Terdekat */}
+            <button
+              onClick={() => searchNearbyPlaces()}
+              disabled={isLoading}
+              className="flex items-center justify-center rounded-md border border-blue-600 px-3 py-2 text-blue-600 font-semibold hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition text-sm"
+            >
+              <span className="mr-1">🔄</span>
+              <span>Refresh Terdekat</span>
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
 
 
       {/* Error Message */}
@@ -422,6 +430,6 @@ return (
           </div>
         )}
       </div>
-    </div>
+  
   );
 }
