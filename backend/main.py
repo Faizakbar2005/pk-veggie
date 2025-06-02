@@ -11,7 +11,6 @@ import csv
 from pathlib import Path
 from typing import Optional
 
-
 import feedparser
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -41,24 +40,58 @@ try:
 except AttributeError:
     pass
 
-nltk.download('stopwords')
-stop_words = set(stopwords.words('indonesian'))
+# Download NLTK data with error handling
+try:
+    nltk.download('stopwords', quiet=True)
+    stop_words = set(stopwords.words('indonesian'))
+except:
+    print("Warning: Could not download NLTK stopwords, using basic stopwords")
+    stop_words = {'dan', 'di', 'ke', 'dari', 'untuk', 'yang', 'dengan', 'pada', 'atau', 'adalah', 'ini', 'itu', 'akan', 'tidak', 'ada', 'juga', 'dapat', 'bisa', 'sudah', 'masih', 'hanya', 'lebih', 'sangat', 'satu', 'dua', 'tiga', 'semua', 'setiap', 'banyak', 'sering', 'selalu', 'kadang'}
 
 # === FastAPI app ===
-app = FastAPI()
+app = FastAPI(
+    title="HORECA Business API",
+    description="API for HORECA business data and sentiment analysis",
+    version="1.0.0"
+)
 
-# === CORS Middleware ===
+# === CORS Middleware - Updated for production ===
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:3001", 
+    "https://localhost:3000",
+    # Add your Vercel frontend URL here
+    "https://*.vercel.app",
+    "https://veggie-mu.vercel.app/"
+]
+
+# In production, be more specific with origins
+if os.getenv("ENVIRONMENT") == "production":
+    frontend_url = os.getenv("FRONTEND_URL")
+    if frontend_url:
+        ALLOWED_ORIGINS = [frontend_url]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS if os.getenv("ENVIRONMENT") == "production" else ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# === SQLite & SQLAlchemy setup ===
-DATABASE_URL = "sqlite:///./userss.db"
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+# === Database Configuration ===
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./userss.db")
+
+# Handle Railway PostgreSQL URL format
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# Configure engine based on database type
+if "postgresql" in DATABASE_URL:
+    engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+else:
+    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+
 Base = declarative_base()
 SessionLocal = sessionmaker(bind=engine)
 
@@ -117,6 +150,7 @@ def get_db():
     finally:
         db.close()
 
+# === Region patterns ===
 region_patterns = {
     r'\bKota Jakarta Pusat\b':      'Jakarta Pusat',
     r'\bKota Jakarta Selatan\b':    'Jakarta Selatan',
@@ -139,6 +173,33 @@ def ekstrak_wilayah_from_pluscode(pc: str) -> str:
             return name
     return None
 
+# === Load Model Sentimen with error handling ===
+model = None
+vectorizer = None
+
+def load_models():
+    global model, vectorizer
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        model_path = os.path.join(base_dir, 'sentiment_model_lgbm.pkl')
+        vectorizer_path = os.path.join(base_dir, 'tfidf_vectorizer_.pkl')
+        
+        if os.path.exists(model_path) and os.path.exists(vectorizer_path):
+            model = joblib.load(model_path)
+            vectorizer = joblib.load(vectorizer_path)
+            print("✓ Sentiment analysis models loaded successfully")
+        else:
+            print(f"⚠️  Model files not found at {model_path} or {vectorizer_path}")
+            print("Sentiment analysis will not be available")
+    except Exception as e:
+        print(f"⚠️  Error loading models: {e}")
+        print("Sentiment analysis will not be available")
+
+# === Google Places API ===
+X_GOOG_API_KEY = os.getenv("GOOGLE_API_KEY", "AIzaSyD7LDPmOrB9LL6pKYz9SQi28a71ORNqdpU")
+BASE_URL = "https://places.googleapis.com/v1/places:searchText"
+NEARBY_URL = "https://places.googleapis.com/v1/places:searchNearby"
+
 # === Function to migrate CSV data to database ===
 def migrate_csv_to_db():
     db = SessionLocal()
@@ -146,14 +207,18 @@ def migrate_csv_to_db():
         # Check if data already exists
         existing_count = db.query(HorecaBusiness).count()
         if existing_count > 0:
-            print(f"Database already contains {existing_count} records. Skipping migration.")
+            print(f"✓ Database already contains {existing_count} records. Skipping migration.")
             return
 
-        csv_path = os.path.join(os.path.dirname(__file__), "all_business_data_horeca_jabodetabek-1744532904805.csv")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_path = os.path.join(base_dir, "all_business_data_horeca_jabodetabek-1744532904805.csv")
+        
         if not os.path.exists(csv_path):
-            print(f"CSV file not found: {csv_path}")
+            print(f"⚠️  CSV file not found: {csv_path}")
+            print("Database will be empty. Please ensure CSV file is present for data migration.")
             return
 
+        print("📊 Starting CSV data migration...")
         df = pd.read_csv(csv_path)
         
         # Filter hanya wilayah Jabodetabek
@@ -192,22 +257,155 @@ def migrate_csv_to_db():
             batch = businesses[i:i + batch_size]
             db.bulk_save_objects(batch)
             db.commit()
-            print(f"Inserted batch {i//batch_size + 1}, records {i+1}-{min(i+batch_size, len(businesses))}")
+            print(f"✓ Inserted batch {i//batch_size + 1}, records {i+1}-{min(i+batch_size, len(businesses))}")
 
-        print(f"Successfully migrated {len(businesses)} records to database")
+        print(f"✓ Successfully migrated {len(businesses)} records to database")
 
     except Exception as e:
-        print(f"Error during migration: {e}")
+        print(f"❌ Error during migration: {e}")
         db.rollback()
     finally:
         db.close()
 
-# === Buat tabel saat startup ===
+# === Preprocessing & Sentiment Prediction ===
+def preprocess(text: str) -> str:
+    if not text:
+        return ""
+    text = text.lower()
+    text = re.sub(r'[^\w\s]', '', text)
+    tokens = text.split()
+    tokens = [word for word in tokens if word not in stop_words]
+    return ' '.join(tokens)
+
+def predict_sentiment(text):
+    if not model or not vectorizer:
+        raise HTTPException(status_code=503, detail="Sentiment analysis model not available")
+    
+    try:
+        processed_text = preprocess(text)
+        vector = vectorizer.transform([processed_text])
+        result = model.predict(vector)[0]
+        return int(result)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error predicting sentiment: {str(e)}")
+
+# === RSS Scraping ===
+def get_articles_rss(query: str):
+    try:
+        url = f"https://news.google.com/rss/search?q={quote(query)}&hl=id&gl=ID&ceid=ID:id"
+        feed = feedparser.parse(url)
+        articles = []
+        for entry in feed.entries[:15]:
+            date = None
+            if hasattr(entry, 'published_parsed') and entry.published_parsed:
+                date = datetime(*entry.published_parsed[:6]).isoformat()
+
+            articles.append({
+                "title": entry.title,
+                "summary": entry.summary,
+                "link": entry.link,
+                "date": date
+            })
+        return articles
+    except Exception as e:
+        print(f"Error fetching RSS articles: {e}")
+        return []
+
+# === Fetch OG Thumbnails ===
+async def fetch_og_image(session, url):
+    try:
+        async with session.get(url, timeout=5) as resp:
+            if resp.status != 200:
+                return None
+            html = await resp.text()
+            soup = BeautifulSoup(html, 'html.parser')
+
+            # Cek Open Graph
+            tag = soup.find('meta', property='og:image')
+            # Fallback ke Twitter Card
+            if not tag:
+                tag = soup.find('meta', attrs={'name': 'twitter:image'})
+            # Fallback ke JSON-LD schema.org
+            if not tag:
+                ld = soup.find('script', type='application/ld+json')
+                if ld:
+                    data = json.loads(ld.string or '{}')
+                    img = data.get('image')
+                    if isinstance(img, str):
+                        return img
+                    elif isinstance(img, dict):
+                        return img.get('url')
+
+            if tag and tag.get('content'):
+                image_url = tag['content']
+                if any(image_url.lower().endswith(ext)
+                       for ext in ['.jpg', '.jpeg', '.png', '.webp']):
+                    return image_url
+    except Exception:
+        pass
+    return "https://via.placeholder.com/150"
+
+def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """
+    Calculate distance between two points using Haversine formula
+    Returns distance in kilometers
+    """
+    R = 6371  # Earth's radius in kilometers
+    
+    # Convert latitude and longitude from degrees to radians
+    lat1_rad = math.radians(lat1)
+    lon1_rad = math.radians(lon1)
+    lat2_rad = math.radians(lat2)
+    lon2_rad = math.radians(lon2)
+    
+    # Haversine formula
+    dlat = lat2_rad - lat1_rad
+    dlon = lon2_rad - lon1_rad
+    
+    a = math.sin(dlat/2)**2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon/2)**2
+    c = 2 * math.asin(math.sqrt(a))
+    
+    return R * c
+
+# === Startup event ===
 @app.on_event("startup")
 def startup():
+    print("🚀 Starting HORECA Business API...")
+    
+    # Create database tables
     Base.metadata.create_all(bind=engine)
+    print("✓ Database tables created/verified")
+    
+    # Load ML models
+    load_models()
+    
     # Migrate CSV data on first startup
     migrate_csv_to_db()
+    
+    print("✅ Application startup completed!")
+
+# === Health check endpoint ===
+@app.get("/")
+def root():
+    return {
+        "message": "HORECA Business API is running!",
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "features": {
+            "sentiment_analysis": model is not None and vectorizer is not None,
+            "database": "connected",
+            "google_places": bool(X_GOOG_API_KEY)
+        }
+    }
+
+@app.get("/health")
+def health_check():
+    return {
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "database": "connected",
+        "models_loaded": model is not None and vectorizer is not None
+    }
 
 # === Endpoint Register ===
 @app.post("/register")
@@ -239,84 +437,12 @@ def update_email(user_id: int = Form(...), email: str = Form(...), db: Session =
     db.commit()
     return {"message": "Email berhasil diperbarui."}
 
-# === Load Model Sentimen ===
-model = joblib.load('backend/sentiment_model_lgbm.pkl')
-vectorizer = joblib.load('backend/tfidf_vectorizer_.pkl')
-
-# === Google Places API ===
-X_GOOG_API_KEY = "AIzaSyD7LDPmOrB9LL6pKYz9SQi28a71ORNqdpU"
-BASE_URL = "https://places.googleapis.com/v1/places:searchText"
-NEARBY_URL = "https://places.googleapis.com/v1/places:searchNearby"
-
-# === Preprocessing & Sentiment Prediction ===
-def preprocess(text: str) -> str:
-    text = text.lower()
-    text = re.sub(r'[^\w\s]', '', text)
-    tokens = text.split()
-    tokens = [word for word in tokens if word not in stop_words]
-    return ' '.join(tokens)
-
-def predict_sentiment(text):
-    vector = vectorizer.transform([text])
-    result = model.predict(vector)[0]
-    return int(result)
-
-# === RSS Scraping ===
-def get_articles_rss(query: str):
-    url = f"https://news.google.com/rss/search?q={quote(query)}&hl=id&gl=ID&ceid=ID:id"
-    feed = feedparser.parse(url)
-    articles = []
-    for entry in feed.entries[:15]:
-        date = None
-        if hasattr(entry, 'published_parsed') and entry.published_parsed:
-            date = datetime(*entry.published_parsed[:6]).isoformat()
-
-        articles.append({
-            "title": entry.title,
-            "summary": entry.summary,
-            "link": entry.link,
-            "date": date
-        })
-    return articles
-
-# === Fetch OG Thumbnails ===
-async def fetch_og_image(session, url):
-    try:
-        async with session.get(url, timeout=5) as resp:
-            if resp.status != 200:
-                return None
-            html = await resp.text()
-            soup = BeautifulSoup(html, 'html.parser')
-
-            # Cek Open Graph
-            tag = soup.find('meta', property='og:image')
-            # Fallback ke Twitter Card
-            if not tag:
-                tag = soup.find('meta', attrs={'name': 'twitter:image'})
-            # Fallback ke JSON-LD schema.org
-            if not tag:
-                ld = soup.find('script', type='application/ld+json')
-                if ld:
-                    import json
-                    data = json.loads(ld.string or '{}')
-                    img = data.get('image')
-                    if isinstance(img, str):
-                        return img
-                    elif isinstance(img, dict):
-                        return img.get('url')
-
-            if tag and tag.get('content'):
-                image_url = tag['content']
-                if any(image_url.lower().endswith(ext)
-                       for ext in ['.jpg', '.jpeg', '.png', '.webp']):
-                    return image_url
-    except Exception:
-        pass
-    return "https://via.placeholder.com/150"
-
 # === Endpoint: /search_news ===
 @app.get("/search_news")
 async def search_news(keyword: str = Query(...)):
+    if not model or not vectorizer:
+        raise HTTPException(status_code=503, detail="Sentiment analysis model not available")
+    
     articles = get_articles_rss(keyword)
     if not articles:
         return {"message": "Tidak ditemukan berita."}
@@ -342,14 +468,26 @@ async def search_news(keyword: str = Query(...)):
             "date": article["date"],
             "score": float(score),
             "thumbnail": thumbnails[i] or "https://via.placeholder.com/150",
-            "sentiment": predict_sentiment(article["title"])
         })
     return result
 
 # === Endpoint: /sentiment ===
 @app.get("/sentiment")
 async def analyze_sentiment(text: str = Query(...)):
-    return {"text": text, "sentiment": predict_sentiment(text)}
+    sentiment = predict_sentiment(text)
+    return {"text": text, "sentiment": sentiment}
+
+@app.post("/sentiment_batch")
+async def sentiment_batch(titles: List[str] = Body(...)):
+    if not model or not vectorizer:
+        raise HTTPException(status_code=503, detail="Sentiment analysis model not available")
+    
+    return {
+        "results": [
+            {"text": title, "sentiment": predict_sentiment(title)}
+            for title in titles
+        ]
+    }
 
 # === Endpoint: /search-places ===
 @app.get("/search-places")
@@ -436,16 +574,92 @@ async def get_place_details(place_id: str = Query(..., description="ID tempat da
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/sentiment_batch")
-async def sentiment_batch(titles: List[str] = Body(...)):
-    return {
-        "results": [
-            {"text": title, "sentiment": predict_sentiment(title)}
-            for title in titles
-        ]
-    }
+# === Endpoint: /search-nearby-places ===
+@app.get("/search-nearby-places")
+async def search_nearby_places(
+    lat: float = Query(..., description="Latitude lokasi pengguna"),
+    lng: float = Query(..., description="Longitude lokasi pengguna"),
+    radius: int = Query(5000, ge=100, le=50000, description="Radius pencarian dalam meter"),
+    type: str = Query("restaurant|hotel|convenience_store|cafe|bakery|meal_takeaway", description="Jenis tempat yang dicari"),
+    max_results: int = Query(20, ge=1, le=100, description="Jumlah hasil maksimal")
+):
+    """
+    Endpoint untuk mencari HORECA terdekat berdasarkan koordinat pengguna
+    """
+    try:
+        # Convert type parameter to included types array
+        included_types = [t.strip() for t in type.split("|") if t.strip()]
+        
+        headers = {
+            "Content-Type": "application/json",
+            "X-Goog-Api-Key": X_GOOG_API_KEY,
+            "X-Goog-FieldMask": ",".join([
+                "places.id",
+                "places.displayName", 
+                "places.formattedAddress",
+                "places.location",
+                "places.rating",
+                "places.userRatingCount",
+                "places.types",
+                "places.photos",
+                "places.websiteUri",
+                "places.nationalPhoneNumber",
+                "places.businessStatus"
+            ])
+        }
+        
+        payload = {
+            "includedTypes": included_types,
+            "maxResultCount": max_results,
+            "locationRestriction": {
+                "circle": {
+                    "center": {
+                        "latitude": lat,
+                        "longitude": lng
+                    },
+                    "radius": radius
+                }
+            },
+            "rankPreference": "DISTANCE"  # Sort by distance
+        }
 
-# === Updated Endpoints using SQLite Database ===
+        async with httpx.AsyncClient() as client:
+            response = await client.post(NEARBY_URL, headers=headers, json=payload)
+
+        if response.status_code != 200:
+            raise HTTPException(
+                status_code=response.status_code, 
+                detail=f"Google Places API Error: {response.text}"
+            )
+
+        data = response.json()
+        places = data.get("places", [])
+        
+        # Add distance calculation to each place
+        for place in places:
+            if "location" in place:
+                place_lat = place["location"]["latitude"]
+                place_lng = place["location"]["longitude"]
+                
+                # Calculate distance using Haversine formula
+                distance = calculate_distance(lat, lng, place_lat, place_lng)
+                place["distance_km"] = round(distance, 2)
+        
+        # Sort by distance (closest first)
+        places.sort(key=lambda x: x.get("distance_km", float('inf')))
+        
+        return {
+            "status": "success",
+            "count": len(places),
+            "user_location": {"lat": lat, "lng": lng},
+            "radius_km": radius / 1000,
+            "results": places
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error searching nearby places: {str(e)}")
+
+# === Database Endpoints ===
 
 @app.get("/top-horeca", response_model=List[HorecaPlace])
 async def get_top_horeca(
