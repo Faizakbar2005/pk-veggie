@@ -60,7 +60,7 @@ ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3001", 
     "https://localhost:3000",
-    # Add your Vercel frontend URL here
+    "https://poorly-real-ghoul.ngrok-free.app",
     "https://*.vercel.app",
     "https://veggie-mu.vercel.app/"
 ]
