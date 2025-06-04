@@ -42,6 +42,12 @@ export default function CardHorecaPotential() {
   };
 
   const fetchAllPlaceNames = async (data) => {
+    // Pastikan data adalah array sebelum menggunakan map
+    if (!Array.isArray(data)) {
+      console.error("fetchAllPlaceNames: data is not an array", data);
+      return;
+    }
+
     const names = {};
     const promises = data.map(async (item) => {
       const placeId = item.name.replace('places/', '');
@@ -62,8 +68,35 @@ export default function CardHorecaPotential() {
       }
       
       const response = await axios.get(url);
-      setHorecaData(response.data);
-      await fetchAllPlaceNames(response.data);
+      
+      // Debug: log the response structure
+      console.log("API Response:", response.data);
+      console.log("Response type:", typeof response.data);
+      console.log("Is array:", Array.isArray(response.data));
+      
+      // Handle different response structures
+      let horecaArray = [];
+      
+      if (Array.isArray(response.data)) {
+        // If response.data is directly an array
+        horecaArray = response.data;
+      } else if (response.data && Array.isArray(response.data.data)) {
+        // If the array is nested in response.data.data
+        horecaArray = response.data.data;
+      } else if (response.data && Array.isArray(response.data.results)) {
+        // If the array is nested in response.data.results
+        horecaArray = response.data.results;
+      } else if (response.data && Array.isArray(response.data.horeca)) {
+        // If the array is nested in response.data.horeca
+        horecaArray = response.data.horeca;
+      } else {
+        // If none of the above, log the structure and set empty array
+        console.error("Unexpected API response structure:", response.data);
+        horecaArray = [];
+      }
+      
+      setHorecaData(horecaArray);
+      await fetchAllPlaceNames(horecaArray);
     } catch (error) {
       console.error("Failed to fetch HORECA data:", error);
       setHorecaData([]);
@@ -72,7 +105,7 @@ export default function CardHorecaPotential() {
     }
   };
 
- useEffect(() => {
+  useEffect(() => {
     fetchData();
     setVisibleCount(5); // Reset tampilan ke 5 saat filter berubah
   }, [selectedWilayah, limit]);
@@ -122,22 +155,22 @@ export default function CardHorecaPotential() {
   );
 
   return (
-   <div className="bg-white rounded-lg shadow-md overflow-hidden">
-  {/* Header dengan filter */}
-  <div className="px-4 sm:px-6 py-4 border-b border-gray-100">
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-      <div>
-        <h3 className="text-xl font-semibold mb-2">
-          Top {visibleCount} HORECA Potensial
-          {selectedWilayah !== "All" && (
-            <span className="text-gray-600"> di {selectedWilayah}</span>
-          )}
-        </h3>
+    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      {/* Header dengan filter */}
+      <div className="px-4 sm:px-6 py-4 border-b border-gray-100">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h3 className="text-xl font-semibold mb-2">
+              Top {visibleCount} HORECA Potensial
+              {selectedWilayah !== "All" && (
+                <span className="text-gray-600"> di {selectedWilayah}</span>
+              )}
+            </h3>
 
-        {/* Garis pemisah */}
-        <div className=" border-gray-200 mt-4"></div>
-      </div>
-          
+            {/* Garis pemisah */}
+            <div className=" border-gray-200 mt-4"></div>
+          </div>
+              
           <div className="flex flex-col xs:flex-row gap-2">
             <div className="relative flex-1 min-w-[150px]">
               <select
@@ -166,7 +199,6 @@ export default function CardHorecaPotential() {
               >
                 <option value={5}>5 Data</option>
                 <option value={10}>10 Data</option>
-                
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -259,7 +291,7 @@ export default function CardHorecaPotential() {
 
             {/* Mobile View (Cards) */}
             <div className="md:hidden space-y-3 p-4">
-              {horecaData.map((item, index) => (
+              {horecaData.slice(0, visibleCount).map((item, index) => (
                 <div key={index} className="bg-gray-50 rounded-lg p-4 shadow-sm">
                   <div className="flex justify-between items-start">
                     <div className="flex-1 min-w-0">
