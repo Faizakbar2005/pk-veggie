@@ -80,7 +80,7 @@ export default function CardBusinessPlaces({ onAddFavorite }) {
     setCurrentPage(1);
     
     try {
-      const response = await axios.get("http://localhost:8080/search-nearby-places", {
+      const response = await axios.get("https://poorly-real-ghoul.ngrok-free.app/search-nearby-places", {
         params: {
           lat: location.lat,
           lng: location.lng,
@@ -111,7 +111,7 @@ export default function CardBusinessPlaces({ onAddFavorite }) {
     setSelectedPlace(null);
     setCurrentPage(1);
     try {
-      const response = await axios.get("http://localhost:8080/search-places", {
+      const response = await axios.get("https://poorly-real-ghoul.ngrok-free.app/search-places", {
         params: {
           query: searchQuery,
           location: userLocation ? `${userLocation.lat},${userLocation.lng}` : "Indonesia",

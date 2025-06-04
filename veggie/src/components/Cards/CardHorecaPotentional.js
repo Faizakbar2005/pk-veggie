@@ -30,7 +30,7 @@ export default function CardHorecaPotential() {
 
     try {
       const response = await axios.get(
-        `http://localhost:8080/place-details?place_id=${placeId}`
+        `https://poorly-real-ghoul.ngrok-free.app/place-details?place_id=${placeId}`
       );
       const name = response.data.data.displayName?.text || placeId;
       placeNameCache.current[placeId] = name;
@@ -55,7 +55,7 @@ export default function CardHorecaPotential() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      let url = `http://localhost:8080/top-horeca?limit=${limit}`;
+      let url = `https://poorly-real-ghoul.ngrok-free.app/top-horeca?limit=${limit}`;
       
       if (selectedWilayah && selectedWilayah !== "All") {
         url += `&wilayah=${encodeURIComponent(selectedWilayah)}`;

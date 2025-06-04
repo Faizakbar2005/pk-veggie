@@ -22,7 +22,7 @@ export default function Register() {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/register", {
+      const response = await fetch("https://poorly-real-ghoul.ngrok-free.app/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

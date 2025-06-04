@@ -15,7 +15,7 @@ const CardRating = () => {
 
   // Fetch data dari FastAPI backend
   useEffect(() => {
-    fetch("http://localhost:8080/correlation-data")
+    fetch("https://poorly-real-ghoul.ngrok-free.app/correlation-data")
       .then((res) => res.json())
       .then((data) => {
         const formatted = data.map((d) => ({
