@@ -42,7 +42,7 @@ export default function Maps() {
 
     try {
       const response = await fetch(
-        `https://poorly-real-ghoul.ngrok-free.app/place-details?place_id=${placeId}`
+        `http://localhost:8080/place-details?place_id=${placeId}`
       );
       
       if (!response.ok) throw new Error('Failed to fetch place details');
@@ -90,7 +90,7 @@ export default function Maps() {
   const fetchHorecaData = async (wilayah = "", limit = 10) => {
     try {
       setLoading(true);
-      let url = `https://poorly-real-ghoul.ngrok-free.app/top-horeca?limit=${limit}`;
+      let url = `http://localhost:8080/top-horeca?limit=${limit}`;
       
       if (wilayah) {
         url += `&wilayah=${encodeURIComponent(wilayah)}`;
@@ -115,7 +115,7 @@ export default function Maps() {
     try {
       const searchQuery = `${placeName} ${wilayah} Indonesia`;
       const response = await fetch(
-        `https://poorly-real-ghoul.ngrok-free.app/search-places?query=${encodeURIComponent(searchQuery)}&location=Indonesia&max_results=1`
+        `http://localhost:8080/search-places?query=${encodeURIComponent(searchQuery)}&location=Indonesia&max_results=1`
       );
       
       if (!response.ok) throw new Error('Failed to search place');
@@ -134,7 +134,7 @@ export default function Maps() {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://poorly-real-ghoul.ngrok-free.app/place-details?place_id=${placeId}`
+        `http://localhost:8080/place-details?place_id=${placeId}`
       );
       
       if (!response.ok) throw new Error('Failed to fetch place details');

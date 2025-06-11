@@ -19,7 +19,7 @@ export default function SentimentAnalysis({ placeDetails, loading }) {
         return;
       }
 
-      const response = await fetch('https://poorly-real-ghoul.ngrok-free.app/sentiment_batch', {
+      const response = await fetch('http://localhost:8080/sentiment_batch', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

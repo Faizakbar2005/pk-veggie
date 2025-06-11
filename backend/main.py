@@ -60,7 +60,7 @@ ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3001", 
     "https://localhost:3000",
-    "https://poorly-real-ghoul.ngrok-free.app",
+    "https://374d-202-51-197-10.ngrok-free.app",
     "https://*.vercel.app",
     "https://veggie-mu.vercel.app/"
 ]

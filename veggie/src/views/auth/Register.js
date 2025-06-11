@@ -22,7 +22,7 @@ export default function Register() {
     };
 
     try {
-      const response = await fetch("https://poorly-real-ghoul.ngrok-free.app/register", {
+      const response = await fetch("https://374d-202-51-197-10.ngrok-free.app/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

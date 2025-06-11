@@ -7,7 +7,7 @@ const CardWilayah = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("https://poorly-real-ghoul.ngrok-free.app/horeca-per-wilayah")
+    fetch("https://374d-202-51-197-10.ngrok-free.app/horeca-per-wilayah")
       .then((res) => res.json())
       .then((result) => setData(result))
       .catch((err) => console.error("Gagal fetch wilayah:", err));

@@ -6,7 +6,7 @@ export default function HeaderStats() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://poorly-real-ghoul.ngrok-free.app/header-stats")
+    fetch("http://localhost:8080/header-stats")
       .then((res) => res.json())
       .then((data) => {
         setStats(data);
