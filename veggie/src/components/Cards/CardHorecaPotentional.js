@@ -30,7 +30,7 @@ export default function CardHorecaPotential() {
 
     try {
       const response = await axios.get(
-        `https://374d-202-51-197-10.ngrok-free.app/place-details?place_id=${placeId}`
+        `http://localhost:8080/place-details?place_id=${placeId}`
       );
       const name = response.data.data.displayName?.text || placeId;
       placeNameCache.current[placeId] = name;
@@ -216,9 +216,7 @@ export default function CardHorecaPotential() {
                       <th scope="col" className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Reviews
                       </th>
-                      <th scope="col" className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Potensi
-                      </th>
+                      
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -246,9 +244,6 @@ export default function CardHorecaPotential() {
                           <div className="text-sm text-gray-500">
                             {item.review_count.toLocaleString()}
                           </div>
-                        </td>
-                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                          <ProgressBar score={item.score} />
                         </td>
                       </tr>
                     ))}

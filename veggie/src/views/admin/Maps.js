@@ -344,15 +344,8 @@ export default function Maps() {
                             </span>
                           </div>
                           
-                          {/* Score */}
-                          <div className="mt-2">
-                            <div className="flex items-center">
-                              <span className="text-xs font-medium text-gray-500">Skor:</span>
-                              <span className="ml-1 text-xs font-semibold text-blue-600">
-                                {horeca.score.toFixed(1)}
-                              </span>
-                            </div>
-                          </div>
+                         
+                         
                         </div>
                       </div>
                     </div>
@@ -385,13 +378,7 @@ export default function Maps() {
                       </span>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-3xl font-bold text-blue-600">
-                      {selectedPlace.score.toFixed(1)}
-                      <span className="text-sm font-normal text-gray-500 ml-1">/10</span>
-                    </div>
-                    <div className="text-xs text-gray-500 mt-1">Overall Score</div>
-                  </div>
+                 
                 </div>
 
                 {/* Detail Information */}

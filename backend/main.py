@@ -247,7 +247,7 @@ def migrate_csv_to_db():
                 plus_code=row.get('places.plusCode'),
                 wilayah=row.get('wilayah'),
                 types=row.get('places.types', '[]'),
-                score=row.get('score', 0)
+                score=row.get('score', 0),
             )
             businesses.append(business)
 

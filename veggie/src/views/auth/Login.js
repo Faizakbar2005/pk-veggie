@@ -26,7 +26,7 @@ export default function Login() {
       formData.append("email", email);
       formData.append("password", password);
 
-      const response = await fetch("https://374d-202-51-197-10.ngrok-free.app/login", {
+      const response = await fetch("http://localhost:8080/login", {
         method: "POST",
         body: formData,
       });

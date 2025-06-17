@@ -7,7 +7,7 @@ const CardWilayah = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("https://374d-202-51-197-10.ngrok-free.app/horeca-per-wilayah")
+    fetch("http://localhost:8080/horeca-per-wilayah")
       .then((res) => res.json())
       .then((result) => setData(result))
       .catch((err) => console.error("Gagal fetch wilayah:", err));
@@ -35,7 +35,7 @@ const CardWilayah = () => {
         <XAxis type="number" />
         <YAxis dataKey="wilayah" type="category" />
         <Tooltip />
-        <Bar dataKey="jumlah" fill="#4caf50" />
+        <Bar dataKey="jumlah" fill="#9ACD32" />
       </BarChart>
     </ResponsiveContainer>
   )}

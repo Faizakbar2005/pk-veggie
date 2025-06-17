@@ -1,86 +1,70 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  ScatterChart,
-  Scatter,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
+  CartesianGrid,
   ResponsiveContainer,
-} from 'recharts';
+} from "recharts";
 
-const CardRating = () => {
+const CardVegetarianRatio = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch data dari FastAPI backend
   useEffect(() => {
-    fetch("https://374d-202-51-197-10.ngrok-free.app/correlation-data")
+    fetch("/vegetarian.json")
       .then((res) => res.json())
-      .then((data) => {
-        const formatted = data.map((d) => ({
-          rating: parseFloat(d["places.rating"]),
-          reviewCount: parseInt(d["places.userRatingCount"]),
-        }));
-        setData(formatted);
+      .then((json) => {
+        const sorted = json.sort((a, b) => b["Vegetarian %"] - a["Vegetarian %"]);
+        setData(sorted);
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Gagal fetch dari backend:", err);
+        console.error("Gagal fetch data vegetarian.json:", err);
         setLoading(false);
       });
   }, []);
 
   return (
     <div className="p-4 bg-white rounded-2xl shadow-md">
-      <h2 className="text-xl font-semibold mb-2">Korelasi Rating vs Jumlah Review</h2>
-
-      {/* Garis pemisah */}
-  <div className="border-b border-gray-200 mb-4"></div>
+      <h2 className="text-xl font-semibold mb-2">Rasio Restoran Menyajikan Makanan Sayuran di Wilayah JABODETABEK</h2>
+      <div className="border-b border-gray-200 mb-4"></div>
 
       {loading ? (
         <p className="text-gray-500">Memuat data...</p>
       ) : data.length === 0 ? (
         <p className="text-red-500">Data tidak tersedia atau kosong.</p>
       ) : (
-<ResponsiveContainer width="100%" height={345}>
-  <ScatterChart
-    margin={{ top: 20, right: 20, bottom: 20, left: 40 }} // geser chart ke kanan
-  >
-    <CartesianGrid />
-    <XAxis
-      type="number"
-      dataKey="rating"
-      name="Rating"
-      label={{ value: "Rating", position: "insideBottom", offset: -5 }}
-      domain={[0, 5]}
-    />
-    <YAxis
-      type="number"
-      dataKey="reviewCount"
-      name="Jumlah Review"
-      label={{
-        value: "Jumlah Review",
-        angle: -90,
-        position: "outsideLeft", // ⬅️ tetap di sisi kiri container
-        dx: -50, // ⬅️ tarik lebih kiri secara manual
-      }}
-    />
-    <Tooltip
-      cursor={{ strokeDasharray: '3 3' }}
-      formatter={(value, name) =>
-        name === "rating"
-          ? [`${value} bintang`, "Rating"]
-          : [value, "Jumlah Review"]
-      }
-    />
-    <Scatter name="Restoran" data={data} fill="#4caf50" />
-  </ScatterChart>
-</ResponsiveContainer>
-
+        <ResponsiveContainer width="100%" height={360}>
+          <BarChart
+            data={data}
+            margin={{ top: 20, right: 20, left: 10, bottom: 60 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="wilayah"
+              angle={-45}
+              textAnchor="end"
+              interval={0}
+              height={60}
+              tick={{ fontSize: 12 }}
+            />
+            <YAxis
+              domain={[0, "dataMax + 1"]}
+              tickFormatter={(value) => `${value}%`}
+            />
+            <Tooltip
+              formatter={(value) => `${value.toFixed(2)}%`}
+              labelFormatter={(label) => `Wilayah: ${label}`}
+            />
+            <Bar dataKey="Vegetarian %" fill="#2E8B57" />
+          </BarChart>
+        </ResponsiveContainer>
       )}
     </div>
   );
 };
 
-export default CardRating;
+export default CardVegetarianRatio;

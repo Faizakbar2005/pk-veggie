@@ -17,7 +17,7 @@ export default function CardNewsSearch() {
     setError(null);
     try {
       const res = await fetch(
-        `https://374d-202-51-197-10.ngrok-free.app/search_news?keyword=${encodeURIComponent(searchQuery)}`
+        `http://localhost:8080/search_news?keyword=${encodeURIComponent(searchQuery)}`
       );
       if (!res.ok) throw new Error("Server error");
       const data = await res.json();

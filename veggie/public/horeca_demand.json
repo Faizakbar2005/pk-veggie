@@ -1,11 +1,11 @@
 [
-  { "wilayah": "Jakarta Selatan", "jumlah":  130.723176 },
-  { "wilayah": "Bekasi", "jumlah": 126.164424 },
-  { "wilayah": "Jakarta Timur", "jumlah": 128.078724 },
-  { "wilayah": "Jakarta Barat", "jumlah": 127.414169 },
-  { "wilayah": "Depok", "jumlah": 129.657841 },
-  { "wilayah": "Bogor", "jumlah":  131.161721 },
-  { "wilayah": "Tangerang", "jumlah": 124.885303 },
-  { "wilayah": "Jakarta Utara", "jumlah": 128.752596 },
-  { "wilayah": "Jakarta Pusat", "jumlah":  129.532189 }
+  { "wilayah": "Jakarta Selatan", "Skor Prediksi": 66.74 },
+  { "wilayah": "Bogor", "Skor Prediksi": 66.60 },
+  { "wilayah": "Jakarta Timur", "Skor Prediksi": 65.08 },
+  { "wilayah": "Depok", "Skor Prediksi": 64.47 },
+  { "wilayah": "Bekasi", "Skor Prediksi": 62.58 },
+  { "wilayah": "Jakarta Utara", "Skor Prediksi": 61.71 },
+  { "wilayah": "Jakarta Barat", "Skor Prediksi": 61.56 },
+  { "wilayah": "Tangerang", "Skor Prediksi": 59.06 },
+  { "wilayah": "Jakarta Pusat", "Skor Prediksi": 51.27 }
 ]

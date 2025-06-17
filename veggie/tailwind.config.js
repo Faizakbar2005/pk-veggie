@@ -30,6 +30,7 @@ module.exports = {
           500: "#22c55e",    // hijau utama (tombol)
           600: "#16a34a",    // hijau hover aktif (tombol hover)
         },
+        
       },
       minHeight: {
         "screen-75": "75vh",
